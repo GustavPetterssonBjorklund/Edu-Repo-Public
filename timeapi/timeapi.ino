@@ -4,10 +4,10 @@
 #include <ArduinoJson.h> // Include the ArduinoJson library
 
 const char* ssid = "ssid";
-const char* password = "pwd";
+const char* password = "passphrase";
 
 // Use the API URL
-const char* apiUrl = "https://timeapi.io/api/Time/current/zone?timeZone=Europe/Paris";
+const char* apiUrl = "https://timeapi.io/api/Time/current/zone?timeZone=Europe/Stockholm";
 
 WiFiClientSecure client;
 
@@ -54,7 +54,7 @@ void fetchTimeFromAPI() {
         Serial.println(payload);
 
         // Parse JSON
-        StaticJsonDocument<512> doc; // Adjust size based on expected payload
+        JsonDocument doc; 
         DeserializationError error = deserializeJson(doc, payload);
 
         if (error) {
@@ -63,10 +63,11 @@ void fetchTimeFromAPI() {
           return;
         }
 
-        // Extract values
+  // Extract available fields
         const char* dateTime = doc["dateTime"];
         const char* timeZone = doc["timeZone"];
-        const char* utcOffset = doc["utcOffset"];
+        const char* dayOfWeek = doc["dayOfWeek"];
+        bool dstActive = doc["dstActive"];
 
         // Print extracted values
         Serial.println("Parsed JSON:");
@@ -74,8 +75,10 @@ void fetchTimeFromAPI() {
         Serial.println(dateTime);
         Serial.print("TimeZone: ");
         Serial.println(timeZone);
-        Serial.print("UTC Offset: ");
-        Serial.println(utcOffset);
+        Serial.print("Day of Week: ");
+        Serial.println(dayOfWeek);
+        Serial.print("DST Active: ");
+        Serial.println(dstActive ? "Yes" : "No");
       }
     } else {
       Serial.printf("Failed to fetch data. HTTP error: %s\n", http.errorToString(httpCode).c_str());
