@@ -1,7 +1,7 @@
 #include <ESP8266WiFi.h>
 #include <ESP8266HTTPClient.h>
 #include <WiFiClientSecure.h>
-#include <ArduinoJson.h> // Include the ArduinoJson library
+#include <ArduinoJson.h>  // Include the ArduinoJson library
 
 const char* ssid = "ssid";
 const char* password = "passphrase";
@@ -15,7 +15,7 @@ void setup() {
   Serial.begin(115200);
   delay(1000);
 
-  client.setInsecure(); // For HTTPS
+  client.setInsecure();  // For HTTPS
 
   WiFi.begin(ssid, password);
   Serial.println("Connecting to WiFi...");
@@ -33,7 +33,7 @@ void setup() {
 }
 
 void loop() {
-  delay(60000); // Fetch every 60 seconds
+  delay(5000);  // Fetch every 5 seconds
   fetchTimeFromAPI();
 }
 
@@ -42,7 +42,7 @@ void fetchTimeFromAPI() {
     HTTPClient http;
 
     Serial.println("Connecting to API...");
-    http.begin(client, apiUrl); // HTTPS URL with secure client
+    http.begin(client, apiUrl);  // HTTPS URL with secure client
     int httpCode = http.GET();
 
     if (httpCode > 0) {
@@ -54,7 +54,7 @@ void fetchTimeFromAPI() {
         Serial.println(payload);
 
         // Parse JSON
-        JsonDocument doc; 
+        JsonDocument doc;
         DeserializationError error = deserializeJson(doc, payload);
 
         if (error) {
@@ -63,16 +63,19 @@ void fetchTimeFromAPI() {
           return;
         }
 
-  // Extract available fields
-        const char* dateTime = doc["dateTime"];
+        // Extract available fields
+        const char* date = doc["date"];
+        const char* time = doc["time"];
         const char* timeZone = doc["timeZone"];
         const char* dayOfWeek = doc["dayOfWeek"];
         bool dstActive = doc["dstActive"];
 
         // Print extracted values
         Serial.println("Parsed JSON:");
-        Serial.print("DateTime: ");
-        Serial.println(dateTime);
+        Serial.print("Date: ");
+        Serial.println(date);
+        Serial.print("Time: ");
+        Serial.println(time);
         Serial.print("TimeZone: ");
         Serial.println(timeZone);
         Serial.print("Day of Week: ");
