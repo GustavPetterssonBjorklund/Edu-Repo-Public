@@ -68,7 +68,7 @@ class timeApi {
   public:
     /**
     * @param apiUrl target url, default: https://timeapi.io/api/Time/current/zone?timeZone=Europe/Stockholm
-    * @param silent if function should NOT print debug lines (should be silent), default: true
+    * @param silent if function should NOT print debug lines (i.e. should be silent), default: true
     * @note class additionally has the printDbg() function that will not be calles if silend == false
     * @note the target url includes time zone
     */
